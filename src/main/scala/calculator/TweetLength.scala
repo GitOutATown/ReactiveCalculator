@@ -3,16 +3,33 @@ package calculator
 object TweetLength {
   final val MaxTweetLength = 140
 
-  /*
-   * Should this make use of Var? Hmmm... I get the sense that it may be
-   * relevant here...
-   */
   def tweetRemainingCharsCount(tweetText: Signal[String]): Signal[Int] = {
-    ???
+    // ???
+    Signal(140 - tweetLength(tweetText()))
   }
 
   def colorForRemainingCharsCount(remainingCharsCount: Signal[Int]): Signal[String] = {
-    ???
+    // ???
+    /* Note that this does not work. It doesn't pick up the changes
+     * because color is not the actual expression. It's just a one
+     * time result of the expression. But the expression is not invoked
+     * again on update because it is no longer bound to color. The result
+     * of color has no binding.
+    val color = remainingCharsCount() match {
+      case c if c >= 15 => "green"
+      case c if 0 < c && c < 15 => "orange"
+      case _ => "red"
+    }
+    Signal(color)
+    */
+    
+    Signal{
+      remainingCharsCount() match {
+	      case c if c >= 15 => "green"
+	      case c if 0 <= c && c < 15 => "orange"
+	      case _ => "red"
+	  }
+    }
   }
 
   /** Computes the length of a tweet, given its text string.
